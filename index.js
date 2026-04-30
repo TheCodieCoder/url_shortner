@@ -23,7 +23,7 @@ app.use(express.json())
 app.use("/", router)
 
 // Connect DB then start server
-connectMongoDB("mongodb://localhost:27017/shortURL")
+    connectMongoDB(process.env.MONGO_URI)
     .then(() => {
         console.log("MongoDB connection status: CONNECTED")
         app.listen(port, () => console.log(`Server status: RUNNING on PORT ${port}`))
