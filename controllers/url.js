@@ -23,12 +23,18 @@ export const generateShortURL = async (req, res) => {
 }
 
 export const getShortenedURL = async (req, res) => {
-    const { shortId } = req.params
-    const entry = await URL.findOneAndUpdate({ shortId }, { 
-        $push : { visitHistory: {timestamp: Date.now()} }
-     })
-
-     res.redirect(entry.redirectURL)
+    try {
+        const { shortId } = req.params
+        const entry = await URL.findOneAndUpdate(
+            { shortId }, 
+            { $push: { visitHistory: { timestamp: Date.now() } } }
+        )
+        if (!entry) return res.status(404).send("Short URL not found")
+        return res.redirect(entry.redirectURL)
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send("Server error")
+    }
 }
 
 export const getAnalytics = async (req, res) => {
