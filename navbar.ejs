@@ -1,0 +1,29 @@
+<nav class="navbar">
+    <a href="/" class="nav-logo">
+        <span class="logo-bracket">[</span>Snap<span class="accent">URL</span><span class="logo-bracket">]</span>
+    </a>
+    <div class="nav-links">
+        <a href="/" class="nav-link <%= active === 'home' ? 'active' : '' %>">
+            <span class="nav-num">01.</span> Home
+        </a>
+        <a href="/about" class="nav-link <%= active === 'about' ? 'active' : '' %>">
+            <span class="nav-num">02.</span> About
+        </a>
+        <a href="/analytics" class="nav-link <%= active === 'analytics' ? 'active' : '' %>">
+            <span class="nav-num">03.</span> Analytics
+        </a>
+    </div>
+    <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="nav-mobile-menu" id="mobileMenu">
+        <a href="/" class="nav-mobile-link">Home</a>
+        <a href="/about" class="nav-mobile-link">About</a>
+        <a href="/analytics" class="nav-mobile-link">Analytics</a>
+    </div>
+</nav>
+<script>
+    function toggleMobileMenu() {
+        document.getElementById('mobileMenu').classList.toggle('open');
+    }
+</script>
