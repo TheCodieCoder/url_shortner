@@ -26,9 +26,12 @@ app.use("/", router)
     connectMongoDB(process.env.MONGO_URI)
     .then(() => {
         console.log("MongoDB connection status: CONNECTED")
-        app.listen(port, () => console.log(`Server status: RUNNING on PORT ${port}`))
+        console.log("ENV check: ", process.env.MONGO_URI)
+        app.listen(port, "0.0.0.0", () => console.log(`Server status: RUNNING on PORT ${port}`))
     })
     .catch(err => {
         console.error("MongoDB connection failed:", err)
         process.exit(1)
     })
+
+
