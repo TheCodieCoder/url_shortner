@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head', { title: 'Home — SnapURL' }) %>
+</head>
+<body>
+    <%- include('partials/navbar', { active: 'home' }) %>
+
+    <main class="hero-section">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-glow"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                <span>URL SHORTENER</span>
+            </div>
+
+            <h1 class="hero-title">
+                Shrink Links.<br>
+                <span class="accent">Amplify Reach.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Transform long, unwieldy URLs into clean, trackable short links in milliseconds.
+            </p>
+
+            <div class="shorten-card">
+                <div class="card-label">PASTE YOUR LONG URL</div>
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </div>
+                    <input
+                        type="url"
+                        id="urlInput"
+                        class="url-input"
+                        placeholder="https://your-very-long-url.com/with/lots/of/parameters"
+                        autocomplete="off"
+                        spellcheck="false"
+                    />
+                    <button class="shorten-btn" id="shortenBtn" onclick="shortenURL()">
+                        <span class="btn-text">Shorten</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+
+                <div class="result-box" id="resultBox">
+                    <div class="result-label">YOUR SHORT LINK</div>
+                    <div class="result-link-row">
+                        <span class="result-link" id="resultLink"></span>
+                        <button class="copy-btn" id="copyBtn" onclick="copyLink()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="error-box" id="errorBox">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span id="errorMsg">Something went wrong.</span>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-num">10M+</span>
+                    <span class="stat-label">Links Shortened</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">99.9%</span>
+                    <span class="stat-label">Uptime</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">&lt;50ms</span>
+                    <span class="stat-label">Avg. Redirect</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script src="/public/main.js"></script>
+    <script>
+        async function shortenURL() {
+            const input = document.getElementById('urlInput');
+            const btn = document.getElementById('shortenBtn');
+            const resultBox = document.getElementById('resultBox');
+            const errorBox = document.getElementById('errorBox');
+            const url = input.value.trim();
+
+            resultBox.classList.remove('visible');
+            errorBox.classList.remove('visible');
+
+            if (!url) {
+                showError('Please enter a URL first.');
+                return;
+            }
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.message || 'Failed to shorten URL');
+
+                const shortLink = `${window.location.origin}/${data.shortId}`;
+                document.getElementById('resultLink').textContent = shortLink;
+                resultBox.classList.add('visible');
+                input.value = '';
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('errorMsg').textContent = msg;
+            document.getElementById('errorBox').classList.add('visible');
+        }
+
+        function copyLink() {
+            const link = document.getElementById('resultLink').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        document.getElementById('urlInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') shortenURL();
+        });
+    </script>
+</body>
+</html>

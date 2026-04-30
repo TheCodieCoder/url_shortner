@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head', { title: 'About — SnapURL' }) %>
+</head>
+<body>
+    <%- include('partials/navbar', { active: 'about' }) %>
+
+    <main class="page-main">
+        <div class="hero-bg-grid"></div>
+
+        <section class="about-section">
+            <div class="section-tag">// ABOUT US</div>
+
+            <h1 class="page-title">Built for Speed.<br><span class="accent">Designed for Insight.</span></h1>
+
+            <div class="about-layout">
+                <div class="about-text-block">
+                    <p class="about-body">
+                        <span class="accent-char">S</span>napURL is a high-performance URL shortening service engineered for developers, marketers, and power users who demand more than just a shorter link. We believe every click carries data — and that data deserves to be surfaced clearly and instantly.
+                    </p>
+                    <p class="about-body">
+                        Every shortened link comes with a built-in analytics dashboard that tracks visit history, click timestamps, and traffic patterns in real time. No third-party trackers. No bloat. Just clean, fast redirects backed by a robust MongoDB-powered infrastructure.
+                    </p>
+                    <p class="about-body">
+                        Whether you're running a campaign, sharing resources, or building integrations via our REST API — SnapURL keeps things simple on the surface and powerful underneath.
+                    </p>
+                </div>
+
+                <div class="about-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div>
+                            <div class="feature-title">Instant Redirect</div>
+                            <div class="feature-desc">Sub-50ms average redirect latency</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <div>
+                            <div class="feature-title">Click Analytics</div>
+                            <div class="feature-desc">Full visit history per short link</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔗</div>
+                        <div>
+                            <div class="feature-title">NanoID Slugs</div>
+                            <div class="feature-desc">Collision-resistant 6-char IDs</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🛡️</div>
+                        <div>
+                            <div class="feature-title">REST API</div>
+                            <div class="feature-desc">Simple JSON API, no auth required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-stack">
+                <div class="stack-label">BUILT WITH</div>
+                <div class="stack-pills">
+                    <span class="pill">Node.js</span>
+                    <span class="pill">Express</span>
+                    <span class="pill">MongoDB</span>
+                    <span class="pill">Mongoose</span>
+                    <span class="pill">NanoID</span>
+                    <span class="pill">EJS</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
